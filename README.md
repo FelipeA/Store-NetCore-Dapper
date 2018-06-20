@@ -10,4 +10,4 @@ Virtual Store used to study:
 - Padronização
 - Dapper
 - Docker
-
+..
