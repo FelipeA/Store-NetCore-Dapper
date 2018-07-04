@@ -78,3 +78,6 @@ Store.Tests/obj/Debug/netcoreapp2.0/Store.Tests.Program.cs
 Store.Tests/obj/Debug/netcoreapp2.0/Store.Tests.csproj.CoreCompileInputs.cache
 Store.Tests/obj/Debug/netcoreapp2.0/Store.Tests.csproj.FileListAbsolute.txt
 Store.Tests/obj/Debug/netcoreapp2.0/Store.Tests.csprojAssemblyReference.cache
+Store.Tests/bin/Debug/netcoreapp2.0/Store.Domain.dll
+Store.Tests/bin/Debug/netcoreapp2.0/Store.Domain.pdb
+Store.Tests/obj/Debug/netcoreapp2.0/Store.Tests.csproj.CopyComplete
