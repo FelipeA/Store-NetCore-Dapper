@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidator;
 using Store.Domain.StoreContext.Enums;
 
 namespace Store.Domain.StoreContext.Entities
 {
-    public class Order
+    public class Order : Notifiable
     {
         private readonly IList<OrderItem> _items;
         private readonly IList<Delivery> _deliveries;
@@ -26,19 +27,56 @@ namespace Store.Domain.StoreContext.Entities
         public IReadOnlyCollection<OrderItem> Items => _items.ToArray();
         public IReadOnlyCollection<Delivery> Deliveries => _deliveries.ToArray();
 
-        public void AddItem(OrderItem orderItem)
+        public void AddItem(Product product, decimal quantity)
         {
-            _items.Add(orderItem);
-        }
+            if (quantity > product.QuantityOnHand)
+                AddNotification("OrdemItem", $"Produto {product.Title} não tem quantidade {quantity} em estoque.");
 
-        public void AddDelivery(Delivery delivery)
-        {
-            _deliveries.Add(delivery);
+            var item = new OrderItem(product, quantity);
+            _items.Add(item);
         }
 
         public void Place()
         {
+            this.Number = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8).ToUpper();
+
+            if (_items.Count == 0)
+                AddNotification("Order", "Este pedido não possue items.");
+        }
+
+        private void Pay()
+        {
+            this.Status = EOrderStatus.Paid;
+
 
         }
+
+        public void Ship()
+        {
+            var deliveries = new List<Delivery>();
+            deliveries.Add(new Delivery(DateTime.Now.AddDays(5)));
+
+            var count = 1;
+            foreach (var item in _items)
+            {
+                if (count == 5)
+                {
+                    count = 1;
+                    deliveries.Add(new Delivery(DateTime.Now.AddDays(5)));
+                }
+
+                count++;
+            }
+ 
+            deliveries.ForEach(x => x.Ship());
+            deliveries.ForEach(x => _deliveries.Add(x));
+        }
+
+        public void Cancel()
+        {
+            this.Status = EOrderStatus.Canceled;
+            _deliveries.ToList().ForEach(x => x.Cancel());
+        }
+
     }
 }
