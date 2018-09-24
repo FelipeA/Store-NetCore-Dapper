@@ -44,17 +44,15 @@ namespace Store.Domain.StoreContext.Entities
                 AddNotification("Order", "Este pedido não possue items.");
         }
 
-        private void Pay()
+        public void Pay()
         {
             this.Status = EOrderStatus.Paid;
-
-
         }
 
         public void Ship()
         {
             var deliveries = new List<Delivery>();
-            deliveries.Add(new Delivery(DateTime.Now.AddDays(5)));
+            //deliveries.Add(new Delivery(DateTime.Now.AddDays(5)));
 
             var count = 1;
             foreach (var item in _items)
